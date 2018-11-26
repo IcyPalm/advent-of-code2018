@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 requests = "*"
 html2text = "*"
+python-dotenv = "*"
+beautifulsoup4 = "*"
+click = "*"
 
 [dev-packages]
 
