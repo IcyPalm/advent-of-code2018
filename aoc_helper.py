@@ -1,5 +1,5 @@
 import os
-from os.path import join, dirname
+from os.path import dirname
 from pathlib import Path
 import click
 import logging
@@ -21,12 +21,9 @@ load_dotenv(dotenv_path)
 AOC_SESSION_TOKEN = os.getenv("AOC_SESSION_TOKEN")
 
 
-# cookies = dict(session=session_token)
-
-
 def download_exercise(exercise_file):
-    url = f"https://adventofcode.com/{year}/day/{day}"
-    r = requests.get(url=url, cookies=cookies)
+    url = f"https://adventofcode.com/{AOC_YEAR}/day/{AOC_DAY}"
+    r = requests.get(url=url, cookies=dict(session=AOC_SESSION_TOKEN))
     page_content = str(BeautifulSoup(r.content, "html.parser").find("article"))
 
     markdown = html2text(page_content)
@@ -35,8 +32,8 @@ def download_exercise(exercise_file):
 
 
 def download_input(input_file):
-    url = f"https://adventofcode.com/{year}/day/{day}/input"
-    r = requests.get(url=url, cookies=cookies)
+    url = f"https://adventofcode.com/{AOC_YEAR}/day/{AOC_DAY}/input"
+    r = requests.get(url=url, cookies=dict(session=AOC_SESSION_TOKEN))
     page_content = r.content
     with open(input_file, "wb") as write_file:
         write_file.write(page_content)
@@ -44,7 +41,7 @@ def download_input(input_file):
 
 def create_day_setup():
     # Create daily folder:
-    day_dir = Path(f"day_{day:02}")
+    day_dir = Path(f"day_{AOC_DAY:02}")
     if not os.path.exists(day_dir):
         logging.info("Creating Directory")
         os.makedirs(day_dir)
@@ -58,7 +55,6 @@ def create_day_setup():
         download_input(input_file)
 
 
-# TODO: If finished: download part two!
 #
 #
 #     `7MN.   `7MF'                              .M"""bgd           mm
