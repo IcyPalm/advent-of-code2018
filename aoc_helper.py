@@ -13,8 +13,7 @@ AOC_YEAR = 2018
 AOC_DAY = 1
 
 # Logging config
-logging.basicConfig(level=logging.INFO)
-# TODO: Logger formatting without user etc
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 # Environment settings for .env files
 dotenv_path = Path(dirname(__file__)) / '.env'
@@ -101,23 +100,36 @@ def guess_day():
         day = directories.pop().strip('day_')
         day = int(day)
         return day
+    # TODO: Check if exercise is finished(and part two), if not suggest last day
     return -1
+
+
+def get_day(day_input):
+    if day_input:
+        return day_input
+    else:
+        day = guess_day()
+        if day > 0:
+            if click.confirm(f'Looks like the day you want is: {day}, correct?'):
+                return day
+    return click.prompt("Please fill in the day(1-31)", type=click.IntRange(1, 31))
 
 
 @click.command()
 @click.option('--session_token', help='Set (a new) AOC session token', metavar='<SESSIONTOKEN>')
 @click.option('--year', '-y', 'year_input', type=int, help='Set the year', metavar='2018')
-@click.option('--day', '-d', 'day_input', type=int, help='Set the day', metavar='19')
-def main(session_token, year_input, day_input):
+@click.option('--day', '-d', 'day_input', type=click.IntRange(1, 31), help='Set the day', metavar='19')
+def main(session_token, day_input, year_input=AOC_DAY):
     check_session_token(session_token)
-    if year_input:
-        global AOC_YEAR
-        AOC_YEAR = year_input
-    if not day_input:
-        day_input = guess_day()
-    print(day_input)
+    global AOC_YEAR
+    AOC_YEAR = year_input
     global AOC_DAY
-    AOC_DAY = day_input
+    AOC_DAY = get_day(day_input)
+    # TODO: Download day files(and check if they exist, prompt user for override)
+    # TODO: Create stub exercise file for specific day
+    # TODO: Download part two of a day(does the input differ?)
+    # TODO: Build a README in main dir
+    # TODO: Maybe even submit an answer?
 
 
 if __name__ == "__main__":
