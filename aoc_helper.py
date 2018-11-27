@@ -9,7 +9,8 @@ from html2text import html2text
 from dotenv import load_dotenv, set_key
 
 # Small config
-AOC_YEAR = 2018
+# AOC_YEAR = 2018
+AOC_YEAR = 2017  # testing
 AOC_DAY = 1
 
 # Logging config
@@ -50,14 +51,22 @@ def create_day_setup():
         logging.debug('Directory exists, skip creating')
         # TODO: Ask for override
     exercise_file = day_dir / 'README.md'
-    logging.debug(f'')
+    logging.debug(f'Exercise file: {exercise_file}')
     if not exercise_file.is_file():
         logging.info('Create Exercise file')
         download_exercise(exercise_file)
+    else:
+        logging.debug('Exercise file exists, skip creating')
+        # TODO: Ask for override
     input_file = day_dir / 'input'
+    logging.debug(f'Input file: {input_file}')
     if not input_file.is_file():
         logging.info('Downloading and creating input file')
         download_input(input_file)
+    else:
+        logging.debug('Input file exists, skip creating')
+        # TODO: Ask for override
+    # TODO: Create stub exercise file for specific day
 
 
 def check_session_token(new_session_token=''):
@@ -108,14 +117,16 @@ def get_day(day_input):
 @click.option('--session_token', help='Set (a new) AOC session token', metavar='<SESSIONTOKEN>')
 @click.option('--year', '-y', 'year_input', type=int, help='Set the year', metavar='2018')
 @click.option('--day', '-d', 'day_input', type=click.IntRange(1, 31), help='Set the day', metavar='19')
-def main(session_token, day_input, year_input=AOC_DAY):
+@click.option('--loglevel', default='INFO', type=click.Choice(logging._levelToName.values()),
+              help='Set the loglevel', metavar='INFO')
+def main(session_token, day_input, loglevel, year_input=AOC_DAY):
+    logging.getLogger().setLevel(getattr(logging, loglevel))
     check_session_token(session_token)
     global AOC_YEAR
     AOC_YEAR = year_input
     global AOC_DAY
     AOC_DAY = get_day(day_input)
     create_day_setup()
-    # TODO: Create stub exercise file for specific day
     # TODO: Download part two of a day(does the input differ?)
     # TODO: Build a README in main dir
     # TODO: Maybe even submit an answer?
