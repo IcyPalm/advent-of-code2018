@@ -1,3 +1,4 @@
+import importlib
 import os
 from os.path import dirname
 from pathlib import Path
@@ -24,6 +25,7 @@ AOC_SESSION_TOKEN = os.getenv('AOC_SESSION_TOKEN')
 
 def download_exercise(exercise_file):
     url = f'https://adventofcode.com/{AOC_YEAR}/day/{AOC_DAY}'
+    logging.debug(f'Downloading exercise from:{url}')
     r = requests.get(url=url, cookies=dict(session=AOC_SESSION_TOKEN))
     page_content = str(BeautifulSoup(r.content, 'html.parser').find('article'))
 
@@ -34,6 +36,7 @@ def download_exercise(exercise_file):
 
 def download_input(input_file):
     url = f'https://adventofcode.com/{AOC_YEAR}/day/{AOC_DAY}/input'
+    logging.debug(f'Downloading input file from:{url}')
     r = requests.get(url=url, cookies=dict(session=AOC_SESSION_TOKEN))
     page_content = r.content
     with open(input_file, 'wb') as write_file:
@@ -48,25 +51,37 @@ def create_day_setup():
         logging.info(f'Creating Directory {day_dir}')
         os.makedirs(day_dir)
     else:
-        logging.debug('Directory exists, skip creating')
+        logging.info('Directory exists, skip creating')
         # TODO: Ask for override
+
     exercise_file = day_dir / 'README.md'
     logging.debug(f'Exercise file: {exercise_file}')
     if not exercise_file.is_file():
         logging.info('Create Exercise file')
         download_exercise(exercise_file)
     else:
-        logging.debug('Exercise file exists, skip creating')
+        logging.info('Exercise file exists, skip creating')
         # TODO: Ask for override
+
     input_file = day_dir / 'input'
     logging.debug(f'Input file: {input_file}')
     if not input_file.is_file():
         logging.info('Downloading and creating input file')
         download_input(input_file)
     else:
-        logging.debug('Input file exists, skip creating')
+        logging.info('Input file exists, skip creating')
         # TODO: Ask for override
-    # TODO: Create stub exercise file for specific day
+
+    day_template = day_dir / f'day_{AOC_DAY:02}.py'
+    logging.debug(f'Template file: {day_template}')
+    if not day_template.is_file():
+        logging.info('Copying Template')
+        with open('template.py', 'r') as template:
+            with open(day_template, 'w') as f:
+                f.write(template.read())
+    else:
+        logging.info('Template file exists, skip creating')
+        # TODO: Ask for override
 
 
 def check_session_token(new_session_token=''):
@@ -135,6 +150,12 @@ def get_day(day_input):
     return click.prompt('Please fill in the day(1-31)', type=click.IntRange(1, 31))
 
 
+def submit():
+    day_template = f'day_{AOC_DAY:02}'
+    exercise_file = importlib.import_module(f'{day_template}.{day_template}')
+    # TODO: Actually submit
+
+
 @click.command()
 @click.option('--session_token', help='Set (a new) AOC session token', metavar='<SESSIONTOKEN>')
 @click.option('--year', '-y', 'year_input', type=int, help='Set the year', metavar='2018')
@@ -144,11 +165,14 @@ def get_day(day_input):
 def main(session_token, day_input, loglevel, year_input=AOC_DAY):
     logging.getLogger().setLevel(getattr(logging, loglevel))
     check_session_token(session_token)
-    global AOC_YEAR
-    AOC_YEAR = year_input
+    if year_input:
+        global AOC_YEAR
+        AOC_YEAR = year_input
     global AOC_DAY
     AOC_DAY = get_day(day_input)
     create_day_setup()
+    submit()
+    # TODO: Figure out how to handle part one and part two
     # TODO: Download part two of a day(does the input differ?)
     # TODO: Build a README in main dir
     # TODO: Maybe even submit an answer?
