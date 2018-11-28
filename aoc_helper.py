@@ -147,7 +147,7 @@ def get_day(day_input):
         if day > 0:
             if click.confirm(f'Looks like the day you want to get is: {day}, correct?'):
                 return day
-    return click.prompt('Please fill in the day(1-31)', type=click.IntRange(1, 31))
+    return click.prompt('Please fill in the day(1-25)', type=click.IntRange(1, 25))
 
 
 def submit():
@@ -159,7 +159,7 @@ def submit():
 @click.command()
 @click.option('--session_token', help='Set (a new) AOC session token', metavar='<SESSIONTOKEN>')
 @click.option('--year', '-y', 'year_input', type=int, help='Set the year', metavar='2018')
-@click.option('--day', '-d', 'day_input', type=click.IntRange(1, 31), help='Set the day', metavar='19')
+@click.option('--day', '-d', 'day_input', type=click.IntRange(1, 25), help='Set the day', metavar='19')
 @click.option('--loglevel', default='INFO', type=click.Choice(logging._levelToName.values()),
               help='Set the loglevel', metavar='INFO')
 def main(session_token, day_input, loglevel, year_input=AOC_DAY):
@@ -172,6 +172,7 @@ def main(session_token, day_input, loglevel, year_input=AOC_DAY):
     AOC_DAY = get_day(day_input)
     create_day_setup()
     submit()
+    # TODO: commandline handler asking what user wants to do, get day, submit, other things?
     # TODO: Figure out how to handle part one and part two
     # TODO: Download part two of a day(does the input differ?)
     # TODO: Build a README in main dir

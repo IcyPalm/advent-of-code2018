@@ -14,5 +14,5 @@ def part2():
 
 if __name__ == "__main__":
     # TODO: Save output to file or pass output so can be automatically submitted
-    print(part1())
-    print(part2())
+    print(f'Part one: {part1()}')
+    print(f'Part two: {part2()}')
