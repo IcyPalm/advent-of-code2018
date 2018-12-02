@@ -10,8 +10,8 @@ from html2text import html2text
 from dotenv import load_dotenv, set_key
 
 # Small config
-# AOC_YEAR = 2018
-AOC_YEAR = 2017  # testing
+AOC_YEAR = 2018
+# AOC_YEAR = 2017  # testing
 AOC_DAY = 1
 
 # Logging config
@@ -23,13 +23,34 @@ load_dotenv(dotenv_path)
 AOC_SESSION_TOKEN = os.getenv('AOC_SESSION_TOKEN')
 
 
+class AocExercise:
+    title = None
+    part_one = None
+    part_one_answer = None
+    part_two = None
+    part_two_answer = None
+
+    def get_html(self):
+        return '\n'.join((filter(None, (self.part_one, self.part_one_answer, self.part_two, self.part_two_answer))))
+
+
 def download_exercise(exercise_file):
     url = f'https://adventofcode.com/{AOC_YEAR}/day/{AOC_DAY}'
     logging.debug(f'Downloading exercise from:{url}')
     r = requests.get(url=url, cookies=dict(session=AOC_SESSION_TOKEN))
-    page_content = str(BeautifulSoup(r.content, 'html.parser').find('article'))
+    page_content = BeautifulSoup(r.content, 'html.parser').findAll('article')
+    parts_count = len(page_content)
+    exercise = AocExercise()
+    exercise.title = BeautifulSoup(r.content, 'html.parser').find('article').find('h2').contents[0].strip('-').strip()
+    exercise.part_one = str(page_content[0])
+    if parts_count > 1:
+        answerstring = str(page_content[0].find_next_sibling('p'))
+        exercise.part_one_answer = answerstring if 'Your puzzle answer was' in answerstring else None
+        exercise.part_two = str(page_content[1])
+        answerstring = str(page_content[1].find_next_sibling('p'))
+        exercise.part_two_answer = answerstring if 'Your puzzle answer was' in answerstring else None
 
-    markdown = html2text(page_content)
+    markdown = html2text(exercise.get_html())
     with open(exercise_file, 'w') as markdownfile:
         markdownfile.write(markdown)
 
@@ -150,7 +171,7 @@ def get_day(day_input):
     return click.prompt('Please fill in the day(1-25)', type=click.IntRange(1, 25))
 
 
-def submit():
+def submit_exercise():
     day_template = f'day_{AOC_DAY:02}'
     exercise_file = importlib.import_module(f'{day_template}.{day_template}')
     # TODO: Actually submit
@@ -160,9 +181,10 @@ def submit():
 @click.option('--session_token', help='Set (a new) AOC session token', metavar='<SESSIONTOKEN>')
 @click.option('--year', '-y', 'year_input', type=int, help='Set the year', metavar='2018')
 @click.option('--day', '-d', 'day_input', type=click.IntRange(1, 25), help='Set the day', metavar='19')
-@click.option('--loglevel', default='INFO', type=click.Choice(logging._levelToName.values()),
+@click.option('--loglevel', default='WARNING', type=click.Choice(logging._levelToName.values()),
               help='Set the loglevel', metavar='INFO')
-def main(session_token, day_input, loglevel, year_input=AOC_DAY):
+@click.option('--submit', '-s', is_flag=True)
+def main(session_token, day_input, loglevel, submit, year_input=AOC_DAY):
     logging.getLogger().setLevel(getattr(logging, loglevel))
     check_session_token(session_token)
     if year_input:
@@ -170,8 +192,10 @@ def main(session_token, day_input, loglevel, year_input=AOC_DAY):
         AOC_YEAR = year_input
     global AOC_DAY
     AOC_DAY = get_day(day_input)
-    create_day_setup()
-    submit()
+    if submit:
+        submit_exercise()
+    else:
+        create_day_setup()
     # TODO: commandline handler asking what user wants to do, get day, submit, other things?
     # TODO: Figure out how to handle part one and part two
     # TODO: Download part two of a day(does the input differ?)
