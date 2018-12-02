@@ -1,12 +1,20 @@
 import os
+from collections import Counter
 
 with open(os.path.join(os.path.dirname(__file__), 'input')) as input_file:
-    data = input_file.read().rstrip()
+    data = input_file.readlines()
 
 
 def part1():
-    answer = "Part one answer"
-    return answer
+    threes = 0
+    twos = 0
+    for line in data:
+        linecount = Counter(line)
+        if 2 in linecount.values():
+            twos += 1
+        if 3 in linecount.values():
+            threes += 1
+    return threes*twos
 
 
 def part2():
