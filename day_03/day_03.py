@@ -24,8 +24,33 @@ def part1():
 
 
 def part2():
-    answer = "Part two answer"
-    return answer
+    field = {}
+    for line in data:
+        chunks = re.findall(r"[\w]+", line)
+        left = int(chunks[1])
+        top = int(chunks[2])
+        size = chunks[3].split('x')
+        size_x = int(size[0])
+        size_y = int(size[1])
+        for x, y in product(range(left, left+size_x),  range(top, top+size_y)):
+            if (x, y) not in field.keys():
+                field[(x, y)] = 1
+            else:
+                field[(x, y)] += 1
+    for line in data:
+        no_overlap = True
+        chunks = re.findall(r"[\w]+", line)
+        left = int(chunks[1])
+        top = int(chunks[2])
+        size = chunks[3].split('x')
+        size_x = int(size[0])
+        size_y = int(size[1])
+        for x, y in product(range(left, left+size_x),  range(top, top+size_y)):
+            if field[(x, y)] > 1:
+                no_overlap = False
+        if no_overlap:
+            return chunks[0]
+    return "Everything overlaps"
 
 
 if __name__ == "__main__":
