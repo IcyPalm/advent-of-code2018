@@ -19,4 +19,6 @@ Template idea from:
 |Day 1: Chronal Calibration|[Day 1](day_01/)|:white_check_mark:|:white_check_mark:|
 |Day 2: Inventory Management System|[Day 2](day_02/)|:white_check_mark:|:white_check_mark:|
 |Day 3: No Matter How You Slice It|[Day 3](day_03/)|:white_check_mark:|:white_check_mark:|
+|Day 4: Repose Record|[Day 4](day_04/)|:white_check_mark:|:white_check_mark:|
+
 <!-- |Day X: Title|[Day X](day_xx/)|:white_check_mark:|:x:| -->

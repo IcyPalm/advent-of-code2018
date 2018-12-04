@@ -5,7 +5,7 @@ with open(os.path.join(os.path.dirname(__file__), 'input')) as input_file:
     data = input_file.read().splitlines()
 
 
-def part1():
+def parse_data():
     eventlist = {}
     for moment in data:
         event_time = datetime.strptime(moment[1:17], '%Y-%m-%d %H:%M')
@@ -26,6 +26,11 @@ def part1():
             wake_up = int(datetime.strftime(key, '%M'))
             for minute in range(fall_asleep, wake_up):
                 guardlist[current_guard][minute] += 1
+    return guardlist, eventlist
+
+
+def part1():
+    guardlist, eventlist = parse_data()
     summed_guardlist = {}
     for guard, minutelist in guardlist.items():
         summed_guardlist[guard] = sum(minutelist.values())
@@ -36,8 +41,17 @@ def part1():
 
 
 def part2():
-    answer = "Part two answer"
-    return answer
+    guardlist, eventlist = parse_data()
+
+    most_asleep_guard = list(guardlist.keys())[0]
+    most_asleep_guard_minute = 0
+
+    for guard, minutelist in guardlist.items():
+        max_minute = max(minutelist, key=minutelist.get)
+        if minutelist[max_minute] > guardlist[most_asleep_guard][most_asleep_guard_minute]:
+            most_asleep_guard = guard
+            most_asleep_guard_minute = max_minute
+    return most_asleep_guard*most_asleep_guard_minute
 
 
 if __name__ == "__main__":
