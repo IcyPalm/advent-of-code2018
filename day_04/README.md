@@ -88,3 +88,19 @@ analyzed.
 _What is the ID of the guard you chose multiplied by the minute you chose?_
 (In the above example, the answer would be `10 * 24 = 240`.)
 
+Your puzzle answer was `77084`.
+
+## \--- Part Two ---
+
+ _Strategy 2:_ Of all guards, which guard is most frequently asleep on the
+same minute?
+
+In the example above, Guard # _99_ spent minute _45_ asleep more than any
+other guard or minute - three times in total. (In all other cases, any guard
+spent any minute asleep at most twice.)
+
+_What is the ID of the guard you chose multiplied by the minute you chose?_
+(In the above example, the answer would be `99 * 45 = 4455`.)
+
+Your puzzle answer was `23047`.
+

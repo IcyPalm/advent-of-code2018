@@ -64,7 +64,7 @@ def download_input(input_file):
         write_file.write(page_content)
 
 
-def create_day_setup():
+def create_day_setup(completed=False):
     # Create daily folder:
     day_dir = Path(f'day_{AOC_DAY:02}')
     logging.debug(f'Directory name: {day_dir}')
@@ -73,16 +73,14 @@ def create_day_setup():
         os.makedirs(day_dir)
     else:
         logging.info('Directory exists, skip creating')
-        # TODO: Ask for override
 
     exercise_file = day_dir / 'README.md'
     logging.debug(f'Exercise file: {exercise_file}')
-    if not exercise_file.is_file():
+    if completed or not exercise_file.is_file():
         logging.info('Create Exercise file')
         download_exercise(exercise_file)
     else:
         logging.info('Exercise file exists, skip creating')
-        # TODO: Ask for override
 
     input_file = day_dir / 'input'
     logging.debug(f'Input file: {input_file}')
@@ -91,7 +89,6 @@ def create_day_setup():
         download_input(input_file)
     else:
         logging.info('Input file exists, skip creating')
-        # TODO: Ask for override
 
     day_template = day_dir / f'day_{AOC_DAY:02}.py'
     logging.debug(f'Template file: {day_template}')
@@ -102,7 +99,6 @@ def create_day_setup():
                 f.write(template.read())
     else:
         logging.info('Template file exists, skip creating')
-        # TODO: Ask for override
 
 
 def check_session_token(new_session_token=''):
@@ -180,11 +176,12 @@ def submit_exercise():
 @click.command()
 @click.option('--session_token', help='Set (a new) AOC session token', metavar='<SESSIONTOKEN>')
 @click.option('--year', '-y', 'year_input', type=int, help='Set the year', metavar='2018')
-@click.option('--day', '-d', 'day_input', type=click.IntRange(1, 25), help='Set the day', metavar='19')
+@click.option('--day', '-d', 'day_input', required=True, type=click.IntRange(1, 25), help='Set the day', metavar='19')
+@click.option('--completed', '-c', is_flag=True)
 @click.option('--loglevel', default='WARNING', type=click.Choice(logging._levelToName.values()),
               help='Set the loglevel', metavar='INFO')
 @click.option('--submit', '-s', is_flag=True)
-def main(session_token, day_input, loglevel, submit, year_input=AOC_DAY):
+def main(session_token, day_input, loglevel, completed, submit, year_input=AOC_DAY):
     logging.getLogger().setLevel(getattr(logging, loglevel))
     check_session_token(session_token)
     if year_input:
@@ -192,7 +189,9 @@ def main(session_token, day_input, loglevel, submit, year_input=AOC_DAY):
         AOC_YEAR = year_input
     global AOC_DAY
     AOC_DAY = get_day(day_input)
-    if submit:
+    if completed:
+        create_day_setup(True)
+    elif submit:
         submit_exercise()
     else:
         create_day_setup()
