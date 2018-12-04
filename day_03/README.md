@@ -67,7 +67,7 @@ The four square inches marked with `X` are claimed by _both`1` and `2`_.
 If the Elves all proceed with their own plans, none of them will have enough
 fabric. _How many square inches of fabric are within two or more claims?_
 
-Your puzzle answer was `104439`.
+Your puzzle answer was `104439`.:white_check_mark:
 
 ## \--- Part Two ---
 
@@ -80,5 +80,5 @@ are made.
 
 _What is the ID of the only claim that doesn't overlap?_
 
-Your puzzle answer was `701`.
+Your puzzle answer was `701`.:white_check_mark:
 

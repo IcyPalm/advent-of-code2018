@@ -48,9 +48,7 @@ Here are other example situations:
 Starting with a frequency of zero, _what is the resulting frequency_ after all
 of the changes in frequency have been applied?
 
-Your puzzle answer was `522`.
-
-:white_check_mark:
+Your puzzle answer was `522`.:white_check_mark:
 
 ## \--- Part Two ---
 
@@ -83,5 +81,5 @@ Here are other examples:
 
 _What is the first frequency your device reaches twice?_
 
-Your puzzle answer was `73364`.
+Your puzzle answer was `73364`.:white_check_mark:
 

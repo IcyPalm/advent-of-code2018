@@ -45,7 +45,7 @@ Multiplying these together produces a checksum of `4 * 3 = 12`.
 
 _What is the checksum_ for your list of box IDs?
 
-Your puzzle answer was `7192`.
+Your puzzle answer was `7192`.:white_check_mark:
 
 ## \--- Part Two ---
 
@@ -74,5 +74,5 @@ _What letters are common between the two correct box IDs?_ (In the example
 above, this is found by removing the differing character from either ID,
 producing `fgij`.)
 
-Your puzzle answer was `mbruvapghxlzycbhmfqjonsie`.
+Your puzzle answer was `mbruvapghxlzycbhmfqjonsie`.:white_check_mark:
 

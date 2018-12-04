@@ -45,11 +45,12 @@ def download_exercise(exercise_file):
     exercise.part_one = str(page_content[0])
     if parts_count > 1:
         answerstring = str(page_content[0].find_next_sibling('p'))
-        exercise.part_one_answer = answerstring if 'Your puzzle answer was' in answerstring else None
+        exercise.part_one_answer = answerstring[:-4]+':white_check_mark:</p>' if 'Your puzzle answer was' in \
+                                                                                 answerstring else None
         exercise.part_two = str(page_content[1])
         answerstring = str(page_content[1].find_next_sibling('p'))
-        exercise.part_two_answer = answerstring if 'Your puzzle answer was' in answerstring else None
-
+        exercise.part_two_answer = answerstring[:-4]+':white_check_mark:</p>' if 'Your puzzle answer was' in \
+                                                                                 answerstring else None
     markdown = html2text(exercise.get_html())
     with open(exercise_file, 'w') as markdownfile:
         markdownfile.write(markdown)

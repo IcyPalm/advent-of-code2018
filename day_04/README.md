@@ -88,7 +88,7 @@ analyzed.
 _What is the ID of the guard you chose multiplied by the minute you chose?_
 (In the above example, the answer would be `10 * 24 = 240`.)
 
-Your puzzle answer was `77084`.
+Your puzzle answer was `77084`.:white_check_mark:
 
 ## \--- Part Two ---
 
@@ -102,5 +102,5 @@ spent any minute asleep at most twice.)
 _What is the ID of the guard you chose multiplied by the minute you chose?_
 (In the above example, the answer would be `99 * 45 = 4455`.)
 
-Your puzzle answer was `23047`.
+Your puzzle answer was `23047`.:white_check_mark:
 
